@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAEDDF"
+    android:id="@+id/fragment_payment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PAYMENT"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textStyle="bold"/>
+
+        <!--        set border-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_info_user"
+            android:layout_margin="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/baseline_location_on_24"
+                    android:background="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery address"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:layout_marginBottom="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <!--                icon-->
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Anh Hào"
+                    android:textStyle="bold"
+                    android:layout_marginRight="20dp"
+                    />
+                <TextView
+                    android:id="@+id/tvPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0934883667"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Đường số 5, 82/8/7B, Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, Hồ Chí Minh"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/baseline_monetization_on_24"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Choose method payment:"
+                android:layout_marginLeft="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/rbPaymentOnDelivery"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Payment on delivery"/>
+            <RadioButton
+                android:id="@+id/rbPaymentWithCard"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Visa/Credit"/>
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/edtCoupon"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textSize="14dp"
+                android:hint="Coupon"
+                android:layout_marginTop="10dp" />
+            <ImageView
+                android:id="@+id/ivRefreshCoupon"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/baseline_wifi_protected_setup_24"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!--            payment detail-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/baseline_payment_24"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:text="Payment detail"/>
+            </LinearLayout>
+
+            <!--            price use coupon-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Price"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="100.00$"
+                    android:paddingRight="20dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!--            price-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Discount"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tvDiscount"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="-0.00$"
+                    android:paddingRight="20dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!--            delivery fees-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Delivery fee"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tvDeliveryFee"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="+2.00$"
+                    android:paddingRight="20dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!--            total price-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Total price (include VAT)"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tvTotalPrice"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="97.00$"
+                    android:paddingRight="20dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btnClose"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#000000"
+                android:textColor="#ffffff"
+                android:layout_marginRight="10dp"
+                android:text="close"/>
+            <Button
+                android:id="@+id/btnConfirm"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FF5722"
+                android:textColor="#000000"
+                android:text="Confirm"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
