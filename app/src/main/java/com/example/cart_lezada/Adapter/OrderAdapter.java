@@ -18,11 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
+import com.example.cart_lezada.Models.AmountProduct;
+import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Models.OrderDetailView;
 import com.example.cart_lezada.R;
 import com.example.cart_lezada.Retrofit.ApiService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +38,7 @@ public class OrderAdapter extends BaseAdapter {
     Context context;
     int layout;
     int total;
+    List<AmountProduct> amountProducts = new ArrayList<AmountProduct>();
 
     public OrderAdapter(List<OrderDetailView> orderDetailViewList, Context context) {
         this.orderDetailViewList = orderDetailViewList;
@@ -143,8 +147,18 @@ public class OrderAdapter extends BaseAdapter {
                 int money = orderDetail.getPrice() * orderDetail.getAmount();
                 if (viewHolder.cbBuy.isChecked()) {
                     total += money;
+                    String productId = String.valueOf(orderDetail.getProductId());
+                    int amount = orderDetail.getAmount();
+                    AmountProduct amountProduct = new AmountProduct(productId, amount);
+                    amountProducts.add(amountProduct);
+                    Toast.makeText(context, String.valueOf(amount), Toast.LENGTH_SHORT).show();
                 } else {
                     total -= money;
+                    for (int i = 0; i < amountProducts.size(); i++) {
+                        if (amountProducts.get(i).getProductId().equals(String.valueOf(orderDetail.getProductId()))){
+                            amountProducts.remove(i);
+                        }
+                    }
                 }
                 sendTotalPriceToMainActivity(total);
             }
@@ -152,8 +166,10 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     private void sendTotalPriceToMainActivity(int total) {
-        Intent intent = new Intent("my-event");
+        Intent intent = new Intent("send2Main");
+        intent.putExtra("amountProducts", (Serializable) amountProducts);
         intent.putExtra("data", String.valueOf(total));
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -180,7 +196,7 @@ public class OrderAdapter extends BaseAdapter {
         builder.setMessage("Do you want delete this order?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                DeleteProductID(orderDetailViewList.get(position).getProductId(), orderDetailViewList.get(position).getOrderId());
+                DeleteProductID(orderDetailViewList.get(position).getOrderId());
                 orderDetailViewList.remove(position);
                 notifyDataSetChanged();
             }
@@ -193,8 +209,8 @@ public class OrderAdapter extends BaseAdapter {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    private void DeleteProductID(int productId, int orderId) {
-        ApiService.apiService.DeleteOderDetailId(productId, orderId).enqueue(new Callback<Void>() {
+    private void DeleteProductID(int orderId) {
+        ApiService.apiService.DeleteOder(orderId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 System.out.println("response = " + response);

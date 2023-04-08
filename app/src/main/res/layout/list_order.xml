@@ -53,15 +53,15 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="70dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivMinus"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="70dp"
-                android:layout_marginTop="65dp"
                 android:background="@drawable/blue_bar"
                 android:src="@drawable/minus" />
 
@@ -70,7 +70,6 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="63dp"
                 android:width="40sp"
                 android:background="#fff"
                 android:text="1"
@@ -80,10 +79,9 @@
 
             <ImageView
                 android:id="@+id/ivPlus"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="63dp"
                 android:background="@drawable/blue_bar"
                 android:src="@drawable/add" />
         </LinearLayout>

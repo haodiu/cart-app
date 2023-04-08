@@ -1,8 +1,13 @@
 package com.example.cart_lezada;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,6 +18,15 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cart_lezada.Models.AmountProduct;
+import com.example.cart_lezada.Models.Order;
+import com.example.cart_lezada.Models.OrderDetailView;
+import com.example.cart_lezada.Retrofit.ApiService;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class PaymentActivity extends AppCompatActivity {
     TextView tvUsername, tvPhoneNumber, tvAddress, tvPrice, tvDiscount, tvDeliveryFee, tvTotalPrice;
     RadioButton rbPaymentWithCard, rbPaymentOnDelivery;
@@ -21,7 +35,7 @@ public class PaymentActivity extends AppCompatActivity {
     ImageView ivRefreshCoupon;
     String COUPONSHOP = "lezada"; //coupon discount 10%
     String FREESHIP = "freeship";
-
+    //List<AmountProduct> orderDetails = new ArrayList<AmountProduct>();
     Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +45,24 @@ public class PaymentActivity extends AppCompatActivity {
         setEvent();
     }
 
+
     private void setEvent() {
         Intent intent = getIntent();
+        int orderId = intent.getIntExtra("orderId", -1);
+        int userId = intent.getIntExtra("userId", -1);
         String username = intent.getStringExtra("username");
         String phoneNumber = intent.getStringExtra("phoneNumber");
         String address = intent.getStringExtra("address");
+
+
+        Order order = (Order) intent.getSerializableExtra("order");
+        System.out.println(order.getOrderPhone());
+        System.out.println(order.getOrderDetails().get(0).getProductId()+ " " + String.valueOf(order.getOrderDetails().get(0).getAmount()));
+        System.out.println(order.getOrderStatus());
+        System.out.println(order.getUserId());
+        System.out.println(order.getOrderAddress());
+
+
         int price = intent.getIntExtra("price", 0);
         tvPrice.setText(String.valueOf(price)+ ".00$" );
 
@@ -91,13 +118,18 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.makeText(PaymentActivity.this, "Please choose payment method!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(PaymentActivity.this, "order confirmation successful!", Toast.LENGTH_SHORT).show();
-                    handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finishAffinity();
-                        }
-                    }, 2000);
+//                    handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            finishAffinity();
+//                        }
+//                    }, 2000);
+                    //Toast.makeText(PaymentActivity.this, orderDetails.get(0).getProductId() + " " + String.valueOf(orderDetails.get(0).getAmount()), Toast.LENGTH_SHORT).show();
+
+//                    order.setOrderStatus(amountProducts));
+                    //System.out.println(order.getOrderDetails().get(0).getAmount());
+//                    ApiService.apiService.DeleteOder(orderId);
                 }
 
             }
@@ -142,4 +174,6 @@ public class PaymentActivity extends AppCompatActivity {
         edtCoupon = findViewById(R.id.edtCoupon);
         ivRefreshCoupon = findViewById(R.id.ivRefreshCoupon);
     }
+
+
 }
