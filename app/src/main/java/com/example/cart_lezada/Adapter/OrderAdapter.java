@@ -154,8 +154,8 @@ public class OrderAdapter extends BaseAdapter {
                     Toast.makeText(context, String.valueOf(amount), Toast.LENGTH_SHORT).show();
                 } else {
                     total -= money;
-                    for (int i = 0; i < amountProducts.size(); i++) {
-                        if (amountProducts.get(i).getProductId().equals(String.valueOf(orderDetail.getProductId()))){
+                    for (int i = amountProducts.size() - 1; i >= 0; i--) {
+                        if (amountProducts.get(i).getProductId().equals(String.valueOf(orderDetail.getProductId()))) {
                             amountProducts.remove(i);
                         }
                     }

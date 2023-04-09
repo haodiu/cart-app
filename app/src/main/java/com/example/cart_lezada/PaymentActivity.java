@@ -37,6 +37,7 @@ public class PaymentActivity extends AppCompatActivity {
     String FREESHIP = "freeship";
     //List<AmountProduct> orderDetails = new ArrayList<AmountProduct>();
     Handler handler;
+    Order order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +56,11 @@ public class PaymentActivity extends AppCompatActivity {
         String address = intent.getStringExtra("address");
 
 
-        Order order = (Order) intent.getSerializableExtra("order");
+        order = (Order) intent.getSerializableExtra("order");
         System.out.println(order.getOrderPhone());
-        System.out.println(order.getOrderDetails().get(0).getProductId()+ " " + String.valueOf(order.getOrderDetails().get(0).getAmount()));
+        for (int i = 0; i < order.getOrderDetails().size(); i++) {
+            System.out.println(order.getOrderDetails().get(i).getProductId()+ " " + String.valueOf(order.getOrderDetails().get(i).getAmount()));
+        }
         System.out.println(order.getOrderStatus());
         System.out.println(order.getUserId());
         System.out.println(order.getOrderAddress());

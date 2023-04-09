@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity{
 
 
                // System.out.println(amountProducts.get(0).getProductId() + " " + String.valueOf(amountProducts.get(0).getAmount()));
-                System.out.println(amountProducts.get(0).getProductId() + " " + String.valueOf(amountProducts.get(0).getAmount()));
+                //System.out.println(amountProducts.get(0).getProductId() + " " + String.valueOf(amountProducts.get(0).getAmount()));
                 Order order = new Order();
                 order.setUserId(userId);
                 order.setOrderPhone(phoneNumber);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity{
                 order.setOrderStatus("CART");
                 order.setOrderDetails(amountProducts);
 
-                intent.putExtra("order", (Serializable) order);
+                intent.putExtra("order", order);
 
 
                 if (total == "") {
