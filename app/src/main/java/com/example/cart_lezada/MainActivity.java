@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,14 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cart_lezada.Adapter.OrderAdapter;
-import com.example.cart_lezada.Models.AmountProduct;
 import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Models.OrderDetailView;
 import com.example.cart_lezada.Retrofit.ApiService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
     TextView tvTotals;
     ImageView ivBuyNow;
     List<OrderDetailView> orderDetailViewList = new ArrayList<OrderDetailView>();
-    List<AmountProduct> amountProducts = new ArrayList<AmountProduct>();
+    Map<Long, Integer> orderDetails = new HashMap<>();
     OrderAdapter adapter;
     int userId = 8;
 
@@ -102,18 +101,13 @@ public class MainActivity extends AppCompatActivity{
                 intent.putExtra("address", address);
 
 
-
-               // System.out.println(amountProducts.get(0).getProductId() + " " + String.valueOf(amountProducts.get(0).getAmount()));
-                //System.out.println(amountProducts.get(0).getProductId() + " " + String.valueOf(amountProducts.get(0).getAmount()));
                 Order order = new Order();
                 order.setUserId(userId);
                 order.setOrderPhone(phoneNumber);
                 order.setOrderAddress(address);
-                order.setOrderStatus("CART");
-                order.setOrderDetails(amountProducts);
-
+                order.setOrderStatus("PREPARE");
+                order.setOrderDetails(orderDetails);
                 intent.putExtra("order", order);
-
 
                 if (total == "") {
                     Toast.makeText(MainActivity.this, "You didn't choose item!", Toast.LENGTH_SHORT).show();
@@ -139,16 +133,7 @@ public class MainActivity extends AppCompatActivity{
         public void onReceive(Context context, Intent intent) {
             String total = intent.getStringExtra("data");
             tvTotals.setText(total);
-            List<AmountProduct> amountProductsTmp = (List<AmountProduct>) intent.getSerializableExtra("amountProducts");
-            intent.removeExtra("amountProducts");
-            //Intent newIntent = new Intent(MainActivity.this, PaymentActivity.class);
-            for (int i = 0; i < amountProductsTmp.size(); i++) {
-                amountProducts.add(amountProductsTmp.get(i));
-//                System.out.println(amountProductsTmp.get(i).getProductId() + " " + String.valueOf(amountProductsTmp.get(i).getAmount()));
-            }
-
-
-
+            orderDetails = (Map<Long, Integer>) intent.getSerializableExtra("orderDetails");
         }
     };
 

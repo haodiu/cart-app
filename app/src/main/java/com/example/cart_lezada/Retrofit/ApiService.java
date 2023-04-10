@@ -1,7 +1,5 @@
 package com.example.cart_lezada.Retrofit;
 
-import androidx.activity.ViewTreeOnBackPressedDispatcherOwner;
-
 import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Models.OrderDetailView;
 import com.google.gson.Gson;
@@ -22,7 +20,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjAwNyIsImlhdCI6MTY4MDk2MzE2NSwiZXhwIjoxNjgxMDQ5NTY1fQ.udFl3G0ZrXalQociVpBESxpBNFMIHAjSmMgS_V1g5xBcg8Je7CAmgarlzVo0dDwIsavXKeoTx9cuZbSlOcYlGw";
+    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjAwNyIsImlhdCI6MTY4MTExNzQ5MywiZXhwIjoxNjgxMjAzODkzfQ.7HI5XCbynBOP28oFo1WuwQ73uSTFd8lL-Fq3jpJqfyWtQnHDOSENUMW_xbQrZL6l_5xs1s7-dXOvrxwCPsw0bg";
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
@@ -48,5 +46,5 @@ public interface ApiService {
     @DELETE("orders/{orderId}")
     Call<Void> DeleteOder(@Path("orderId") int orderId);
     @POST("orders")
-    Call<Void> createUser(@Body Order order);
+    Call<Void> createOrder(@Body Order order);
 }

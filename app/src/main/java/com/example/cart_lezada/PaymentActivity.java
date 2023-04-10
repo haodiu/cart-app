@@ -1,13 +1,8 @@
 package com.example.cart_lezada;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -18,14 +13,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cart_lezada.Models.AmountProduct;
 import com.example.cart_lezada.Models.Order;
-import com.example.cart_lezada.Models.OrderDetailView;
 import com.example.cart_lezada.Retrofit.ApiService;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity {
     TextView tvUsername, tvPhoneNumber, tvAddress, tvPrice, tvDiscount, tvDeliveryFee, tvTotalPrice;
@@ -35,9 +28,9 @@ public class PaymentActivity extends AppCompatActivity {
     ImageView ivRefreshCoupon;
     String COUPONSHOP = "lezada"; //coupon discount 10%
     String FREESHIP = "freeship";
+    Order order;
     //List<AmountProduct> orderDetails = new ArrayList<AmountProduct>();
     Handler handler;
-    Order order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +47,7 @@ public class PaymentActivity extends AppCompatActivity {
         String username = intent.getStringExtra("username");
         String phoneNumber = intent.getStringExtra("phoneNumber");
         String address = intent.getStringExtra("address");
-
-
         order = (Order) intent.getSerializableExtra("order");
-        System.out.println(order.getOrderPhone());
-        for (int i = 0; i < order.getOrderDetails().size(); i++) {
-            System.out.println(order.getOrderDetails().get(i).getProductId()+ " " + String.valueOf(order.getOrderDetails().get(i).getAmount()));
-        }
-        System.out.println(order.getOrderStatus());
-        System.out.println(order.getUserId());
-        System.out.println(order.getOrderAddress());
 
 
         int price = intent.getIntExtra("price", 0);
@@ -77,8 +61,6 @@ public class PaymentActivity extends AppCompatActivity {
         tvDeliveryFee.setText("+" + String.valueOf(deliveryPrice) + ".00$");
         int totalPrice = price + deliveryPrice;
         tvTotalPrice.setText(totalPrice + ".00$");
-
-
         //set price after use coupon
         ivRefreshCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +90,6 @@ public class PaymentActivity extends AppCompatActivity {
                 if(rbPaymentWithCard.isChecked()) {
                     Toast.makeText(PaymentActivity.this, "The system is maintenance!", Toast.LENGTH_SHORT).show();
                     rbPaymentWithCard.setVisibility(View.GONE);
-
                 }
             }
         });
@@ -121,18 +102,10 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.makeText(PaymentActivity.this, "Please choose payment method!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(PaymentActivity.this, "order confirmation successful!", Toast.LENGTH_SHORT).show();
-//                    handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            finishAffinity();
-//                        }
-//                    }, 2000);
-                    //Toast.makeText(PaymentActivity.this, orderDetails.get(0).getProductId() + " " + String.valueOf(orderDetails.get(0).getAmount()), Toast.LENGTH_SHORT).show();
-
-//                    order.setOrderStatus(amountProducts));
-                    //System.out.println(order.getOrderDetails().get(0).getAmount());
-//                    ApiService.apiService.DeleteOder(orderId);
+                    createOrder();
+                    System.out.println("orderId: " + String.valueOf(orderId));
+                    deleteOrder(orderId);
+                    quitApp();
                 }
 
             }
@@ -178,5 +151,55 @@ public class PaymentActivity extends AppCompatActivity {
         ivRefreshCoupon = findViewById(R.id.ivRefreshCoupon);
     }
 
+    private void createOrder() {
+        ApiService.apiService.createOrder(order).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response from the server
+                    Toast.makeText(PaymentActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle the error response from the server
+                    Toast.makeText(PaymentActivity.this, "Failed to create order", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle the network failure
+                Toast.makeText(PaymentActivity.this, "Failed to create order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void quitApp() {
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finishAffinity();
+            }
+        }, 2000);
+    }
+
+    private void deleteOrder(int orderId) {
+        ApiService.apiService.DeleteOder(orderId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response from the server
+                    Toast.makeText(PaymentActivity.this, "Order deleted successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle the error response from the server
+                    Toast.makeText(PaymentActivity.this, "Failed to delete order", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle the network failure
+                Toast.makeText(PaymentActivity.this, "Failed to delete order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

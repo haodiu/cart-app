@@ -18,15 +18,15 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
-import com.example.cart_lezada.Models.AmountProduct;
-import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Models.OrderDetailView;
 import com.example.cart_lezada.R;
 import com.example.cart_lezada.Retrofit.ApiService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +38,7 @@ public class OrderAdapter extends BaseAdapter {
     Context context;
     int layout;
     int total;
-    List<AmountProduct> amountProducts = new ArrayList<AmountProduct>();
+    Map<Long, Integer> orderDetails = new HashMap<>();
 
     public OrderAdapter(List<OrderDetailView> orderDetailViewList, Context context) {
         this.orderDetailViewList = orderDetailViewList;
@@ -104,14 +104,16 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.ivMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OrderDetailView orderDetail = orderDetailViewList.get(position);
-                int amount = orderDetail.getAmount();
+                OrderDetailView orderDetailView = orderDetailViewList.get(position);
+                int amount = orderDetailView.getAmount();
                 amount--;
                 if (amount > 0) {
-                    orderDetail.setAmount(amount);
+                    orderDetailView.setAmount(amount);
                     viewHolder.tvQuantity.setText(String.valueOf(amount));
                     if (viewHolder.cbBuy.isChecked()) {
-                        total -= orderDetail.getPrice();
+                        total -= orderDetailView.getPrice();
+                        orderDetails.remove((long) orderDetailView.getProductId(), amount+1);
+                        orderDetails.put((long) orderDetailView.getProductId(), amount);
                     }
                 } else {
                     Toast.makeText(context.getApplicationContext(), "Product: the amount must be more than 0!", Toast.LENGTH_SHORT).show();
@@ -123,15 +125,17 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.ivPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OrderDetailView orderDetail = orderDetailViewList.get(position);
-                int amount = orderDetail.getAmount();
-                int remain = orderDetail.getRemain();
+                OrderDetailView orderDetailView = orderDetailViewList.get(position);
+                int amount = orderDetailView.getAmount();
+                int remain = orderDetailView.getRemain();
                 amount++;
                 if (amount <= remain) {
                     orderDetailViewList.get(position).setAmount(amount);
                     viewHolder.tvQuantity.setText(String.valueOf(amount));
                     if (viewHolder.cbBuy.isChecked()) {
-                        total += orderDetail.getPrice();
+                        total += orderDetailView.getPrice();
+                        orderDetails.remove((long) orderDetailView.getProductId(), amount-1);
+                        orderDetails.put((long) orderDetailView.getProductId(), amount);
                     }
                 } else {
                     Toast.makeText(context.getApplicationContext(), "Product: the amount must be less than the remaining amount!", Toast.LENGTH_SHORT).show();
@@ -141,24 +145,18 @@ public class OrderAdapter extends BaseAdapter {
         });
         //checkbox event
         viewHolder.cbBuy.setOnClickListener(new View.OnClickListener() {
-            OrderDetailView orderDetail = orderDetailViewList.get(position);
+            OrderDetailView orderDetailView = orderDetailViewList.get(position);
             @Override
             public void onClick(View view) {
-                int money = orderDetail.getPrice() * orderDetail.getAmount();
+                int money = orderDetailView.getPrice() * orderDetailView.getAmount();
+                Long productId = (long) orderDetailView.getProductId();
+                int amount = orderDetailView.getAmount();
                 if (viewHolder.cbBuy.isChecked()) {
                     total += money;
-                    String productId = String.valueOf(orderDetail.getProductId());
-                    int amount = orderDetail.getAmount();
-                    AmountProduct amountProduct = new AmountProduct(productId, amount);
-                    amountProducts.add(amountProduct);
-                    Toast.makeText(context, String.valueOf(amount), Toast.LENGTH_SHORT).show();
+                    orderDetails.put(productId, amount);
                 } else {
                     total -= money;
-                    for (int i = amountProducts.size() - 1; i >= 0; i--) {
-                        if (amountProducts.get(i).getProductId().equals(String.valueOf(orderDetail.getProductId()))) {
-                            amountProducts.remove(i);
-                        }
-                    }
+                    orderDetails.remove(productId, amount);
                 }
                 sendTotalPriceToMainActivity(total);
             }
@@ -167,9 +165,9 @@ public class OrderAdapter extends BaseAdapter {
 
     private void sendTotalPriceToMainActivity(int total) {
         Intent intent = new Intent("send2Main");
-        intent.putExtra("amountProducts", (Serializable) amountProducts);
+//        intent.putExtra("amountProducts", (Serializable) amountProducts);
         intent.putExtra("data", String.valueOf(total));
-
+        intent.putExtra("orderDetails", (Serializable) orderDetails);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
