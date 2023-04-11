@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Retrofit.ApiService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +32,7 @@ public class PaymentActivity extends AppCompatActivity {
     String COUPONSHOP = "lezada"; //coupon discount 10%
     String FREESHIP = "freeship";
     Order order;
+    Map<Integer, Integer> orderIds = new HashMap<>();
     //List<AmountProduct> orderDetails = new ArrayList<AmountProduct>();
     Handler handler;
     @Override
@@ -48,7 +52,7 @@ public class PaymentActivity extends AppCompatActivity {
         String phoneNumber = intent.getStringExtra("phoneNumber");
         String address = intent.getStringExtra("address");
         order = (Order) intent.getSerializableExtra("order");
-
+        orderIds = (Map<Integer, Integer>) intent.getSerializableExtra("mainOrderIds");
 
         int price = intent.getIntExtra("price", 0);
         tvPrice.setText(String.valueOf(price)+ ".00$" );
@@ -104,7 +108,10 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.makeText(PaymentActivity.this, "order confirmation successful!", Toast.LENGTH_SHORT).show();
                     createOrder();
                     System.out.println("orderId: " + String.valueOf(orderId));
-                    deleteOrder(orderId);
+                    orderIds.forEach((key, value) -> {
+                        deleteOrder(value);
+                    });
+
                     quitApp();
                 }
 

@@ -24,6 +24,7 @@ import com.example.cart_lezada.Retrofit.ApiService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class OrderAdapter extends BaseAdapter {
     Context context;
     int layout;
     int total;
-    Map<Long, Integer> orderDetails = new HashMap<>();
+    Map<Integer, Integer> orderDetails = new HashMap<>();
+    Map<Integer, Integer> orderIds = new HashMap<>();
 
     public OrderAdapter(List<OrderDetailView> orderDetailViewList, Context context) {
         this.orderDetailViewList = orderDetailViewList;
@@ -112,8 +114,8 @@ public class OrderAdapter extends BaseAdapter {
                     viewHolder.tvQuantity.setText(String.valueOf(amount));
                     if (viewHolder.cbBuy.isChecked()) {
                         total -= orderDetailView.getPrice();
-                        orderDetails.remove((long) orderDetailView.getProductId(), amount+1);
-                        orderDetails.put((long) orderDetailView.getProductId(), amount);
+                        orderDetails.remove(orderDetailView.getProductId(), amount+1);
+                        orderDetails.put(orderDetailView.getProductId(), amount);
                     }
                 } else {
                     Toast.makeText(context.getApplicationContext(), "Product: the amount must be more than 0!", Toast.LENGTH_SHORT).show();
@@ -134,8 +136,8 @@ public class OrderAdapter extends BaseAdapter {
                     viewHolder.tvQuantity.setText(String.valueOf(amount));
                     if (viewHolder.cbBuy.isChecked()) {
                         total += orderDetailView.getPrice();
-                        orderDetails.remove((long) orderDetailView.getProductId(), amount-1);
-                        orderDetails.put((long) orderDetailView.getProductId(), amount);
+                        orderDetails.remove(orderDetailView.getProductId(), amount-1);
+                        orderDetails.put(orderDetailView.getProductId(), amount);
                     }
                 } else {
                     Toast.makeText(context.getApplicationContext(), "Product: the amount must be less than the remaining amount!", Toast.LENGTH_SHORT).show();
@@ -149,14 +151,17 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 int money = orderDetailView.getPrice() * orderDetailView.getAmount();
-                Long productId = (long) orderDetailView.getProductId();
+                int productId = orderDetailView.getProductId();
+                int orderId = orderDetailView.getOrderId();
                 int amount = orderDetailView.getAmount();
                 if (viewHolder.cbBuy.isChecked()) {
                     total += money;
                     orderDetails.put(productId, amount);
+                    orderIds.put(productId, orderId);
                 } else {
                     total -= money;
                     orderDetails.remove(productId, amount);
+                    orderIds.remove(productId, orderId);
                 }
                 sendTotalPriceToMainActivity(total);
             }
@@ -165,9 +170,9 @@ public class OrderAdapter extends BaseAdapter {
 
     private void sendTotalPriceToMainActivity(int total) {
         Intent intent = new Intent("send2Main");
-//        intent.putExtra("amountProducts", (Serializable) amountProducts);
         intent.putExtra("data", String.valueOf(total));
         intent.putExtra("orderDetails", (Serializable) orderDetails);
+        intent.putExtra("orderIds", (Serializable) orderIds);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

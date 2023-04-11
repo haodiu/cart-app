@@ -10,13 +10,13 @@ public class Order implements Serializable {
     private String orderAddress;
     private String orderStatus;
 
-    private Map<Long, Integer> orderDetails;
+    private Map<Integer, Integer> orderDetails;
 
-    public Map<Long, Integer> getOrderDetails() {
+    public Map<Integer, Integer> getOrderDetails() {
         return orderDetails;
     }
 
-    public void setOrderDetails(Map<Long, Integer> orderDetails) {
+    public void setOrderDetails(Map<Integer, Integer> orderDetails) {
         this.orderDetails = orderDetails;
     }
 

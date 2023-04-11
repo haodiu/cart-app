@@ -19,6 +19,7 @@ import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Models.OrderDetailView;
 import com.example.cart_lezada.Retrofit.ApiService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity{
     TextView tvTotals;
     ImageView ivBuyNow;
     List<OrderDetailView> orderDetailViewList = new ArrayList<OrderDetailView>();
-    Map<Long, Integer> orderDetails = new HashMap<>();
+    Map<Integer, Integer> orderDetails = new HashMap<>();
+    Map<Integer, Integer> orderIds = new HashMap<>();
     OrderAdapter adapter;
     int userId = 8;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity{
                 for (int i = 0; i < listTmp.size(); i++) {
                     if (listTmp.get(i).getStatus().equals("CART")) {
                         orderDetailViewList.add(listTmp.get(i));
+                        System.out.println(listTmp.get(i).getOrderId() + " ---- ");
                     }
                 }
                 setEvent();
@@ -68,6 +71,25 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+//    private void updateOrderAPI(Order order) {
+//        ApiService.apiService.updateOrder(order).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    // Handle the successful response from the server
+//                    System.out.println("update order success");
+//                } else {
+//                    // Handle the error response from the server
+//                    System.out.println("update order failure");
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                // Handle the network failure
+//                System.out.println("update order failure");
+//            }
+//        });
+//    }
 
     private void setEvent() {
         setOrderAdapter();
@@ -94,7 +116,7 @@ public class MainActivity extends AppCompatActivity{
 //                String price = String.valueOf(orderDetailView.getPrice());
                 String total = tvTotals.getText().toString().trim();
                 Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-                intent.putExtra("orderId", orderId);
+                //intent.putExtra("orderId", orderId);
                 intent.putExtra("userId", userId);
                 intent.putExtra("username", username);
                 intent.putExtra("phoneNumber", phoneNumber);
@@ -108,6 +130,9 @@ public class MainActivity extends AppCompatActivity{
                 order.setOrderStatus("PREPARE");
                 order.setOrderDetails(orderDetails);
                 intent.putExtra("order", order);
+                intent.putExtra("mainOrderIds", (Serializable) orderIds);
+
+//                updateOrderAPI(order);
 
                 if (total == "") {
                     Toast.makeText(MainActivity.this, "You didn't choose item!", Toast.LENGTH_SHORT).show();
@@ -133,7 +158,12 @@ public class MainActivity extends AppCompatActivity{
         public void onReceive(Context context, Intent intent) {
             String total = intent.getStringExtra("data");
             tvTotals.setText(total);
-            orderDetails = (Map<Long, Integer>) intent.getSerializableExtra("orderDetails");
+            orderDetails = (Map<Integer, Integer>) intent.getSerializableExtra("orderDetails");
+            orderIds = (Map<Integer, Integer>) intent.getSerializableExtra("orderIds");
+            orderDetails.forEach((key, value) -> {
+                System.out.println(key + " - " + value);
+            });
+            System.out.println("----");
         }
     };
 
@@ -141,6 +171,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("send2Main"));
+//        getListOrderAPI();
     }
 
     @Override
