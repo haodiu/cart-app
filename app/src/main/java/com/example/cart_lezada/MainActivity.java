@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity{
 //                updateOrderAPI(order);
 
                 if (total == "") {
-                    Toast.makeText(MainActivity.this, "You didn't choose item!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "You didn't choose any item yet!", Toast.LENGTH_SHORT).show();
                 } else {
                     intent.putExtra("price", Integer.parseInt(total));
                     startActivity(intent);
@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("send2Main"));
-//        getListOrderAPI();
     }
 
     @Override

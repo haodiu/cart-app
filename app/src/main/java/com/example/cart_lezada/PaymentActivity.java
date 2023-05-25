@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.cart_lezada.Models.Order;
 import com.example.cart_lezada.Retrofit.ApiService;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +25,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity {
-    TextView tvUsername, tvPhoneNumber, tvAddress, tvPrice, tvDiscount, tvDeliveryFee, tvTotalPrice;
+    TextView tvUsername, tvPrice, tvDiscount, tvDeliveryFee, tvTotalPrice;
     RadioButton rbPaymentWithCard, rbPaymentOnDelivery;
     Button btnClose, btnConfirm;
-    EditText edtCoupon;
+    EditText edtCoupon, edtPhoneNumber, edtAddress;
     ImageView ivRefreshCoupon;
     String COUPONSHOP = "lezada"; //coupon discount 10%
     String FREESHIP = "freeship";
@@ -58,8 +59,8 @@ public class PaymentActivity extends AppCompatActivity {
         tvPrice.setText(String.valueOf(price)+ ".00$" );
 
         tvUsername.setText(username);
-        tvPhoneNumber.setText(phoneNumber);
-        tvAddress.setText(address);
+        edtPhoneNumber.setText(phoneNumber);
+        edtAddress.setText(address);
         //all price before use coupon
         int deliveryPrice = 2;
         tvDeliveryFee.setText("+" + String.valueOf(deliveryPrice) + ".00$");
@@ -106,6 +107,8 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.makeText(PaymentActivity.this, "Please choose payment method!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(PaymentActivity.this, "order confirmation successful!", Toast.LENGTH_SHORT).show();
+                    order.setOrderPhone(edtPhoneNumber.getText().toString().trim());
+                    order.setOrderAddress(edtAddress.getText().toString().trim());
                     createOrder();
                     System.out.println("orderId: " + String.valueOf(orderId));
                     orderIds.forEach((key, value) -> {
@@ -144,8 +147,8 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void setControl() {
         tvUsername = findViewById(R.id.tvUsername);
-        tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
-        tvAddress = findViewById(R.id.tvAddress);
+        edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
+        edtAddress = findViewById(R.id.edtAddress);
         tvPrice = findViewById(R.id.tvPrice);
         tvDiscount = findViewById(R.id.tvDiscount);
         tvDeliveryFee = findViewById(R.id.tvDeliveryFee);
@@ -164,17 +167,20 @@ public class PaymentActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     // Handle the successful response from the server
-                    Toast.makeText(PaymentActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PaymentActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
+                    System.out.println("Order created successfully!");
                 } else {
                     // Handle the error response from the server
-                    Toast.makeText(PaymentActivity.this, "Failed to create order", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PaymentActivity.this, "Failed to create order", Toast.LENGTH_SHORT).show();
+                    System.out.println("Failed to create order!");
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // Handle the network failure
-                Toast.makeText(PaymentActivity.this, "Failed to create order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PaymentActivity.this, "Failed to create order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                System.out.println("Failed to create order: " + t.getMessage());
             }
         });
     }
@@ -195,16 +201,19 @@ public class PaymentActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     // Handle the successful response from the server
-                    Toast.makeText(PaymentActivity.this, "Order deleted successfully", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PaymentActivity.this, "Order deleted successfully", Toast.LENGTH_SHORT).show();
+                    System.out.println("Order deleted successfully!");
                 } else {
                     // Handle the error response from the server
-                    Toast.makeText(PaymentActivity.this, "Failed to delete order", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PaymentActivity.this, "Failed to delete order", Toast.LENGTH_SHORT).show();
+                    System.out.println("Failed to delete order!");
                 }
             }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // Handle the network failure
-                Toast.makeText(PaymentActivity.this, "Failed to delete order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PaymentActivity.this, "Failed to delete order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                System.out.println("Failed to delete order: " + t.getMessage());
             }
         });
     }

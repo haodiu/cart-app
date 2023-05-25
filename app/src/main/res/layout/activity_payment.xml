@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAEDDF"
+    android:background="@color/beige"
     android:id="@+id/fragment_payment">
 
     <LinearLayout
@@ -63,20 +63,24 @@
                     android:textStyle="bold"
                     android:layout_marginRight="20dp"
                     />
-                <TextView
-                    android:id="@+id/tvPhoneNumber"
+                <EditText
+                    android:id="@+id/edtPhoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0934883667"/>
+                    android:text="0934883667"
+                    android:hint="phone number"
+                    android:textSize="14dp"/>
             </LinearLayout>
-            <TextView
-                android:id="@+id/tvAddress"
+            <EditText
+                android:id="@+id/edtAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Đường số 5, 82/8/7B, Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, Hồ Chí Minh"
+                android:hint="address"
                 android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="30dp"
+                android:textSize="14dp"/>
         </LinearLayout>
 
         <LinearLayout

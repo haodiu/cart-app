@@ -21,7 +21,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjAwNyIsImlhdCI6MTY4MTExNzQ5MywiZXhwIjoxNjgxMjAzODkzfQ.7HI5XCbynBOP28oFo1WuwQ73uSTFd8lL-Fq3jpJqfyWtQnHDOSENUMW_xbQrZL6l_5xs1s7-dXOvrxwCPsw0bg";
+    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYW9uZ3V5ZW4iLCJpYXQiOjE2ODUwMDEyMzcsImV4cCI6MTY4NTA4NzYzN30.PalNucgN7cWb7gDKjNg3mCWQt8N4xncQHI391gZiPiJloqxRr-_ARg3NPXYtzXKyazezk1SOJc9AHO_j2xsvlg";
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
@@ -35,7 +35,7 @@ public interface ApiService {
     // client -> setTime gọi API,
 
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://192.168.1.4:8081/api/")
+            .baseUrl("http://192.168.1.2:8081/api/")
 //            .baseUrl("https://d19cqcnpm01-api.azurewebsites.net/")
             .client(client) // bỏ cũng đc nếu API chạy nhanh
             .addConverterFactory(GsonConverterFactory.create(gson))

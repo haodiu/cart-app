@@ -85,8 +85,6 @@ public class OrderAdapter extends BaseAdapter {
                 .load(orderDetailView.getUrl())
                 .into(viewHolder.ivPhone);
         setAdapterEvent(viewHolder, position);
-
-
         return convertView;
     }
 
@@ -99,7 +97,6 @@ public class OrderAdapter extends BaseAdapter {
                 } else {
                     showDeleteConfirmationDialog(position);
                 }
-
             }
         });
         //giam so luong don hang cua 1 product
@@ -118,7 +115,7 @@ public class OrderAdapter extends BaseAdapter {
                         orderDetails.put(orderDetailView.getProductId(), amount);
                     }
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "Product: the amount must be more than 0!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context.getApplicationContext(), "Product: the amount must be more than 0!", Toast.LENGTH_SHORT).show();
                 }
                 sendTotalPriceToMainActivity(total);
             }
@@ -218,7 +215,7 @@ public class OrderAdapter extends BaseAdapter {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 System.out.println("response = " + response);
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "deleted success", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "deleted success", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "failure", Toast.LENGTH_SHORT).show();
                 }
